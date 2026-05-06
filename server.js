@@ -8,8 +8,8 @@ app.use(express.json());
 let posts = [];
 
 // GET - listar posts
-app.get('/posts', (req, res) => {
-  res.json(posts);
+app.get('/posts', async (req, res) => {
+  res.json({ ok: true });
 });
 
 // POST - criar post
