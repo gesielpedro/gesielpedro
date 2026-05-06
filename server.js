@@ -11,10 +11,10 @@ app.use(express.json());
 // Banco em memória (temporário)
 let posts = [];
 
-// 🔹 Rota raiz (teste)
-app.get('/', (req, res) => {
-  res.send('API ONLINE 🚀');
-});
+// // 🔹 Rota raiz (teste)
+// app.get('/', (req, res) => {
+  // res.send('API ONLINE 🚀');
+// });
 
 // 🔹 GET - listar posts
 app.get('/posts', (req, res) => {
@@ -42,6 +42,11 @@ app.post('/posts', (req, res) => {
   posts.push(novoPost);
 
   res.status(201).json(novoPost);
+});
+
+app.use((req, res, next) => {
+  console.log("Rota acessada:", req.url);
+  next();
 });
 
 // 🔹 Rota fallback (evita "Not Found" genérico)
