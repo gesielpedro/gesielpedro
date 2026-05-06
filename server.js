@@ -8,9 +8,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir frontend (seu index.html)
-app.use(express.static(__dirname));
-
 // Banco em memória (temporário)
 let posts = [];
 
@@ -23,6 +20,10 @@ app.get('/', (req, res) => {
 app.get('/posts', (req, res) => {
   res.json(posts);
 });
+
+
+// Servir frontend (seu index.html)
+app.use(express.static(__dirname));
 
 // 🔹 POST - criar post
 app.post('/posts', (req, res) => {
