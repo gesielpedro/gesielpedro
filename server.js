@@ -1,37 +1,26 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Banco em memória (temporário)
 let posts = [];
 
-// // 🔹 Rota raiz (teste)
-// app.get('/', (req, res) => {
-  // res.send('API ONLINE 🚀');
-// });
+// 🔹 Home
+app.get('/', (req, res) => {
+  res.send('API ONLINE 🚀');
+});
 
-// 🔹 GET - listar posts
+// 🔹 LISTAR POSTS
 app.get('/posts', (req, res) => {
   res.json(posts);
 });
 
-
-// Servir frontend (seu index.html)
-app.use(express.static(__dirname));
-
-// 🔹 POST - criar post
+// 🔹 CRIAR POST
 app.post('/posts', (req, res) => {
   const { title, content } = req.body;
-
-  if (!title || !content) {
-    return res.status(400).json({ error: 'Título e conteúdo são obrigatórios' });
-  }
 
   const novoPost = {
     id: Date.now(),
@@ -44,17 +33,45 @@ app.post('/posts', (req, res) => {
   res.status(201).json(novoPost);
 });
 
-app.use((req, res, next) => {
-  console.log("Rota acessada:", req.url);
-  next();
+// 🔹 EDITAR POST
+app.put('/posts/:id', (req, res) => {
+  const id = Number(req.params.id);
+
+  const { title, content } = req.body;
+
+  const post = posts.find(p => p.id === id);
+
+  if (!post) {
+    return res.status(404).json({
+      error: 'Post não encontrado'
+    });
+  }
+
+  post.title = title;
+  post.content = content;
+
+  res.json(post);
 });
 
-// 🔹 Rota fallback (evita "Not Found" genérico)
+// 🔹 EXCLUIR POST
+app.delete('/posts/:id', (req, res) => {
+  const id = Number(req.params.id);
+
+  posts = posts.filter(p => p.id !== id);
+
+  res.json({
+    message: 'Post removido'
+  });
+});
+
+// 🔹 404
 app.use((req, res) => {
-  res.status(404).json({ error: 'Rota não encontrada' });
+  res.status(404).json({
+    error: 'Rota não encontrada'
+  });
 });
 
-// 🔹 PORTA CORRETA PARA RENDER
+// 🔹 PORTA RENDER
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
