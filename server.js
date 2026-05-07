@@ -8,10 +8,10 @@ app.use(express.json());
 
 let posts = [];
 
-// // 🔹 Home
-// app.get('/', (req, res) => {
-//   res.send('API ONLINE 🚀');
-// });
+// 🔹 Home
+app.get('/', (req, res) => {
+  res.send('API ONLINE 🚀');
+});
 
 // 🔹 LISTAR POSTS
 app.get('/posts', (req, res) => {
